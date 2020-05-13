@@ -29,14 +29,15 @@ public class SwiftAudioRecorderPlugin: NSObject, FlutterPlugin, AVAudioRecorderD
                 mPath = documentsPath + "/" + String(Int(startTime.timeIntervalSince1970)) + ".m4a"
                 print("path: " + mPath)
             }
-            let settings = [
+            let settings: [String: Any] = [
                 AVFormatIDKey: getOutputFormatFromString(mExtension),
-                AVSampleRateKey: 12000,
-                AVNumberOfChannelsKey: 1,
-                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+                AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
+                AVEncoderBitRateKey : 80000,
+                AVNumberOfChannelsKey: 2,
+                AVSampleRateKey : 44100.0
             ]
             do {
-                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord, with: AVAudioSessionCategoryOptions.defaultToSpeaker)
+                try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: .defaultToSpeaker)
                 try AVAudioSession.sharedInstance().setActive(true)
 
                 audioRecorder = try AVAudioRecorder(url: URL(string: mPath)!, settings: settings)
@@ -64,7 +65,7 @@ public class SwiftAudioRecorderPlugin: NSObject, FlutterPlugin, AVAudioRecorderD
             result(isRecording)
         case "hasPermissions":
             print("hasPermissions")
-            switch AVAudioSession.sharedInstance().recordPermission(){
+            switch AVAudioSession.sharedInstance().recordPermission {
             case AVAudioSession.RecordPermission.granted:
                 print("granted")
                 hasPermissions = true
@@ -103,3 +104,4 @@ public class SwiftAudioRecorderPlugin: NSObject, FlutterPlugin, AVAudioRecorderD
             }
         }
     }
+
