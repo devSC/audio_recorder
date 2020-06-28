@@ -1,9 +1,11 @@
 package com.jordanalcaraz.audiorecorder.audiorecorder;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -100,12 +102,16 @@ public class AudioRecorderPlugin implements MethodCallHandler {
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.FROYO)
   private void startNormalRecording() {
     mRecorder = new MediaRecorder();
     mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
     mRecorder.setOutputFormat(getOutputFormatFromString(mExtension));
     mRecorder.setOutputFile(mFilePath);
     mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+    mRecorder.setAudioSamplingRate(44100);
+    mRecorder.setAudioEncodingBitRate(80000);
+    mRecorder.setAudioChannels(2);
 
     try {
       mRecorder.prepare();
