@@ -16,7 +16,7 @@ public class WavRecorder {
     private static final String AUDIO_RECORDER_TEMP_FOLDER = "AudioRecorder";
     private static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
     private static final int RECORDER_SAMPLERATE = 44100;
-    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
+    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_BACK;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
     private AudioRecord recorder = null;
@@ -54,7 +54,6 @@ public class WavRecorder {
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 RECORDER_SAMPLERATE, RECORDER_CHANNELS,
                 RECORDER_AUDIO_ENCODING, bufferSize);
-
         int i = recorder.getState();
         if (i == 1)
             recorder.startRecording();
@@ -134,8 +133,9 @@ public class WavRecorder {
         long totalAudioLen = 0;
         long totalDataLen = totalAudioLen + 36;
         long longSampleRate = RECORDER_SAMPLERATE;
-        int channels = ((RECORDER_CHANNELS == AudioFormat.CHANNEL_IN_MONO) ? 1
-                : 2);
+//        int channels = ((RECORDER_CHANNELS == AudioFormat.CHANNEL_IN_MONO) ? 1
+//                : 2);
+        int channels = 2;
         long byteRate = RECORDER_BPP * RECORDER_SAMPLERATE * channels / 8;
 
         byte[] data = new byte[bufferSize];
